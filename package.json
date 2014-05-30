@@ -1,0 +1,9 @@
+{
+  "name": "highlightjs-html",
+  "version": "0.0.1",
+  "main": "./index.js",
+  "dependencies": {
+    "grammarjs-recursive-parser": "*",
+    "grammarjs-grammar": "*"
+  }
+}

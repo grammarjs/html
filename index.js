@@ -4,8 +4,14 @@
  */
 
 var Grammar = require('grammarjs-grammar');
-var grammar = module.exports = new Grammar('markup');
+var grammar = new Grammar('markup');
 var expression = grammar.expression;
+
+/**
+ * Expose `grammar`.
+ */
+
+module.exports = grammar;
 
 /**
  * Start.

@@ -19,7 +19,7 @@ module.exports = grammar;
  */
 
 expression('markup')
-  .match(':tag.begin', passthrough);
+  .match(':tag*', passthrough);
 
 /**
  * Tag.
@@ -38,9 +38,15 @@ expression('tag.begin')
     ':ws', 
     ':tag.name', 
     ':ws', 
+    ':tag.attribute*', 
+    ':ws', 
     ':tag.punctuation.bracket.end', 
     passthrough
   );
+
+/**
+ * Tag punctuation.
+ */
 
 expression('tag.punctuation.bracket.begin')
   .match('<', value);
@@ -123,7 +129,7 @@ expression('tag.end')
     ':ws', 
     ':tag.name', 
     ':ws', 
-    ':tag.punctuation.bracket.close.end', 
+    ':tag.punctuation.bracket.end', 
     passthrough
   );
 
@@ -168,10 +174,8 @@ expression('tag.end')
 // expression('entity')
 //   .match(/\&#?[\da-z]{1,8};/i, value);
 
-// expression('equal')
-//   .match('=', function(val){
-//     return token('operator', val);
-//   });
+expression('tag.attribute.operator')
+  .match('=', value);
 
 // /**
 //  * Whitespace.
@@ -195,7 +199,15 @@ function value(val) {
 }
 
 function passthrough() {
-  return token(this.expression.name, slice.call(arguments));
+  var arr = [];
+  for (var i = 0, n = arguments.length; i < n; i++) {
+    if (Array.isArray(arguments[i])) {
+      arr.push.apply(arr, arguments[i]);
+    } else {
+      arr.push(arguments[i]);
+    }
+  }
+  return token(this.expression.name, arr);
 }
 
 // function values() {

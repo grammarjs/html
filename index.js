@@ -26,7 +26,27 @@ expression('markup')
  */
 
 expression('tag')
-  .match(':tag.begin', ':tag?', ':tag.end', ':ws', passthrough);
+  .match(':tag.block', passthrough)
+  //.match(':tag.inline', passthrough);
+
+/**
+ * Block Tag.
+ */
+
+expression('tag.block')
+  .match(
+    ':tag.begin', 
+    ':tag?', 
+    ':tag.end', 
+    ':ws', 
+     passthrough);
+
+/**
+ * Inline tag.
+ */
+
+expression('tag.inline')
+  .match(':tag.begin', passthrough);
 
 /**
  * Open tag.
@@ -41,8 +61,7 @@ expression('tag.begin')
     ':tag.attribute*', 
     ':ws', 
     ':tag.punctuation.bracket.end', 
-    passthrough
-  );
+    passthrough);
 
 /**
  * Tag punctuation.
@@ -79,8 +98,7 @@ expression('tag.attribute')
     ':ws', 
     ':tag.attribute.value', 
     ':ws', 
-    passthrough
-  );
+    passthrough);
 
 /**
  * Attribute name.
@@ -94,9 +112,19 @@ expression('tag.attribute.name')
  */
 
 expression('tag.attribute.value')
-  .match(':string.quote.double', ':tag.attribute.value.expression', ':string.quote.double', passthrough)
-  .match(':string.quote.single', ':tag.attribute.value.expression', ':string.quote.single', passthrough)
-  .match(':tag.attribute.value.expression', passthrough);
+  .match(
+    ':string.quote.double', 
+    ':tag.attribute.value.expression', 
+    ':string.quote.double', 
+    passthrough)
+  .match(
+    ':string.quote.single', 
+    ':tag.attribute.value.expression', 
+    ':string.quote.single', 
+    passthrough)
+  .match(
+    ':tag.attribute.value.expression', 
+    passthrough);
 
 /**
  * Double quotes.
@@ -112,16 +140,16 @@ expression('string.quote.double')
 expression('string.quote.single')
   .match("'", value);
 
-// /**
-//  * Attribute expression.
-//  */
+/**
+ * Attribute expression.
+ */
 
 expression('tag.attribute.value.expression')
   .match(/[^<"'>]+/, value);
 
-// /**
-//  * Close tag.
-//  */
+/**
+ * Close tag.
+ */
 
 expression('tag.end')
   .match(
@@ -130,35 +158,48 @@ expression('tag.end')
     ':tag.name', 
     ':ws', 
     ':tag.punctuation.bracket.end', 
-    passthrough
-  );
+    passthrough);
 
-// /**
-//  * Self-closing tag.
-//  */
+/**
+ * Text element.
+ */
 
-// expression('inline-tag')
-//   .match('<', ':ws', ':attr-name', ':ws', '/', ':ws', '>');
+expression('text')
+  .match(/[^<>]+/, value);
 
-// /**
-//  * Text element.
-//  */
+/**
+ * Comment.
+ */
 
-// expression('text')
-//   .match(/[^<>]+/, function($1){
-//     return token('text', $1);
-//   });
+expression('comment')
+  .match(
+    ':comment.punctuation.bracket.begin',
+    ':comment.content',
+    ':comment.punctuation.bracket.end',
+    passthrough);
+  //.match('<!--', /[\w\W]*/, '-->', function($1, $2, $3){
+  // requires lookahead
 
-// /**
-//  * Comment.
-//  */
+/**
+ * Comment opening bracket.
+ */
 
-// expression('comment')
-//   //.match('<!--', /[\w\W]*/, '-->', function($1, $2, $3){
-//   // requires lookahead
-//   .match('<!--', /[a-z\s]*/, '-->', function($1, $2, $3){
-//     return token('comment', $1 + $2 + $3);
-//   });
+expression('comment.punctuation.bracket.begin')
+  .match('<!--', value);
+
+/**
+ * Comment closing bracket.
+ */
+
+expression('comment.punctuation.bracket.end')
+  .match('-->', value);
+
+/**
+ * Comment content.
+ */
+
+expression('comment.content')
+  .match(/[a-z\s]*/, value);
 
 // /**
 //  * Cdata.
@@ -173,6 +214,10 @@ expression('tag.end')
 
 // expression('entity')
 //   .match(/\&#?[\da-z]{1,8};/i, value);
+
+/**
+ * Operator.
+ */
 
 expression('tag.attribute.operator')
   .match('=', value);
@@ -209,28 +254,6 @@ function passthrough() {
   }
   return token(this.expression.name, arr);
 }
-
-// function values() {
-//   // for each
-//   return token(this.expression.name, val);
-// }
-
-// function args() {
-//   var x = Array.prototype.slice.call(arguments);
-//   var r = [];
-//   for (var i = 0, n = x.length; i < n; i++) {
-//     r = r.concat(x[i]);
-//   }
-//   return r;
-// }
-
-// function attr($1, $2, $3) {
-//   return [
-//     token('punctuation', $1),
-//     $2,
-//     token('punctuation', $3),
-//   ];
-// }
 
 function log() {
   console.log('log', arguments)

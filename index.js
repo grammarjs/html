@@ -3,9 +3,12 @@
  * Module dependencies.
  */
 
+var Token = require('languagejs-token');
 var Grammar = require('grammarjs-grammar');
 var grammar = new Grammar('markup');
 var expression = grammar.expression;
+var value = Token.value;
+var passthrough = Token.passthrough;
 var slice = [].slice;
 
 /**
@@ -228,32 +231,6 @@ expression('tag.attribute.operator')
 
 expression('ws')
   .match(/[\s]*/, value);
-
-function Token(type, content) {
-  this.type = type;
-  this.content = content;
-}
-
-function token(type, val) {
-  //return [ type, val ];
-  return new Token(type, val);
-}
-
-function value(val) {
-  return token(this.expression.name, val);
-}
-
-function passthrough() {
-  var arr = [];
-  for (var i = 0, n = arguments.length; i < n; i++) {
-    if (Array.isArray(arguments[i])) {
-      arr.push.apply(arr, arguments[i]);
-    } else {
-      arr.push(arguments[i]);
-    }
-  }
-  return token(this.expression.name, arr);
-}
 
 function log() {
   console.log('log', arguments)

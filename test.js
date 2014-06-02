@@ -5,9 +5,11 @@ var Parser = require('grammarjs-recursive-parser');
 var parser = new Parser(grammar);
 
 describe('html', function(){
-  it('tag', function(){
-    var str = '<p></p>';
-    assert.equal(str, compile(str));
+  describe('tag', function(){
+    it('tag', function(){
+      var str = '<p></p>';
+      assert.equal(str, compile(str));
+    });
   });
 
   describe('tag.attribute', function(){
@@ -38,7 +40,21 @@ describe('html', function(){
 
     it('contenteditable=true', function(){
       var str = '<p contenteditable=true></p>';
-      assert.equal(str, compile(str, true));
+      assert.equal(str, compile(str));
+    });
+  });
+
+  describe('tag.block', function(){
+    it('nested', function(){
+      var str = '<p><span></span></p>';
+      assert.equal(str, compile(str));
+    });
+  });
+
+  describe('tag.inline', function(){
+    it('<input/>', function(){
+      var str = '<input/>';
+      assert.equal(str, compile(str));
     });
   });
 });

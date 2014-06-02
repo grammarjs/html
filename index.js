@@ -30,7 +30,7 @@ expression('markup')
 
 expression('tag')
   .match(':tag.block', passthrough)
-  //.match(':tag.inline', passthrough);
+  .match(':tag.inline', passthrough);
 
 /**
  * Block Tag.
@@ -38,24 +38,17 @@ expression('tag')
 
 expression('tag.block')
   .match(
-    ':tag.begin',
+    ':tag.block.begin',
     ':tag?',
-    ':tag.end',
+    ':tag.block.end',
     ':ws',
      passthrough);
-
-/**
- * Inline tag.
- */
-
-expression('tag.inline')
-  .match(':tag.begin', passthrough);
 
 /**
  * Open tag.
  */
 
-expression('tag.begin')
+expression('tag.block.begin')
   .match(
     ':tag.punctuation.bracket.begin',
     ':ws',
@@ -157,7 +150,7 @@ expression('tag.attribute.value.expression')
  * Close tag.
  */
 
-expression('tag.end')
+expression('tag.block.end')
   .match(
     ':tag.punctuation.bracket.close.begin',
     ':ws',
@@ -165,6 +158,21 @@ expression('tag.end')
     ':ws',
     ':tag.punctuation.bracket.end',
     passthrough);
+
+/**
+ * Inline tag.
+ */
+
+expression('tag.inline')
+  .match(
+    ':tag.punctuation.bracket.begin',
+    ':ws',
+    ':tag.name',
+    ':ws',
+    ':tag.attribute*',
+    ':ws',
+    ':tag.punctuation.bracket.close.end'
+  );
 
 /**
  * Text element.

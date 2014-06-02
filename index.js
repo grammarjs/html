@@ -209,7 +209,20 @@ expression('comment.content')
  */
 
 expression('tag.cdata')
-  .match('<![CDATA[', /[\w\W]*/, ']]>', value);
+  .match(
+    ':tag.cdata.begin',
+    ':tag.cdata.content',
+    ':tag.cdata.end',
+    value);
+
+expression('tag.cdata.begin')
+  .match('<![CDATA[', value);
+
+expression('tag.cdata.content')
+  .match(/[\w\W]*/, value);
+
+expression('tag.cdata.end')
+  .match(']]>', value);
 
 /**
  * HTML entity.
@@ -223,13 +236,26 @@ expression('string.entity')
  */
 
 expression('tag.prolog')
-  .match('<?', /.+?/, '?>', value);
+  .match(
+    ':tag.prolog.begin',
+    ':tag.prolog.content',
+    ':tag.prolog.end',
+    value);
+
+expression('tag.prolog.begin')
+  .match('<?', value);
+
+expression('tag.prolog.content')
+  .match(/.+/, value);
+
+expression('tag.prolog.end')
+  .match('?>', value);
 
 /**
  * Doctype.
  */
 
-expression('tag.name.doctype')
+expression('tag.doctype.name')
   .match('doctype', value)
   .match('DOCTYPE', value);
 

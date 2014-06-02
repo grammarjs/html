@@ -38,10 +38,10 @@ expression('tag')
 
 expression('tag.block')
   .match(
-    ':tag.begin', 
-    ':tag?', 
-    ':tag.end', 
-    ':ws', 
+    ':tag.begin',
+    ':tag?',
+    ':tag.end',
+    ':ws',
      passthrough);
 
 /**
@@ -57,13 +57,13 @@ expression('tag.inline')
 
 expression('tag.begin')
   .match(
-    ':tag.punctuation.bracket.begin', 
-    ':ws', 
-    ':tag.name', 
-    ':ws', 
-    ':tag.attribute*', 
-    ':ws', 
-    ':tag.punctuation.bracket.end', 
+    ':tag.punctuation.bracket.begin',
+    ':ws',
+    ':tag.name',
+    ':ws',
+    ':tag.attribute*',
+    ':ws',
+    ':tag.punctuation.bracket.end',
     passthrough);
 
 /**
@@ -95,12 +95,12 @@ expression('tag.name')
 
 expression('tag.attribute')
   .match(
-    ':tag.attribute.name', 
-    ':ws', 
-    ':tag.attribute.operator', 
-    ':ws', 
-    ':tag.attribute.value', 
-    ':ws', 
+    ':tag.attribute.name',
+    ':ws',
+    ':tag.attribute.operator',
+    ':ws',
+    ':tag.attribute.value',
+    ':ws',
     passthrough);
 
 /**
@@ -116,17 +116,17 @@ expression('tag.attribute.name')
 
 expression('tag.attribute.value')
   .match(
-    ':string.quote.double', 
-    ':tag.attribute.value.expression', 
-    ':string.quote.double', 
+    ':string.quote.double',
+    ':tag.attribute.value.expression',
+    ':string.quote.double',
     passthrough)
   .match(
-    ':string.quote.single', 
-    ':tag.attribute.value.expression', 
-    ':string.quote.single', 
+    ':string.quote.single',
+    ':tag.attribute.value.expression',
+    ':string.quote.single',
     passthrough)
   .match(
-    ':tag.attribute.value.expression', 
+    ':tag.attribute.value.expression',
     passthrough);
 
 /**
@@ -156,11 +156,11 @@ expression('tag.attribute.value.expression')
 
 expression('tag.end')
   .match(
-    ':tag.punctuation.bracket.close.begin', 
-    ':ws', 
-    ':tag.name', 
-    ':ws', 
-    ':tag.punctuation.bracket.end', 
+    ':tag.punctuation.bracket.close.begin',
+    ':ws',
+    ':tag.name',
+    ':ws',
+    ':tag.punctuation.bracket.end',
     passthrough);
 
 /**
@@ -204,19 +204,34 @@ expression('comment.punctuation.bracket.end')
 expression('comment.content')
   .match(/[a-z\s]*/, value);
 
-// /**
-//  * Cdata.
-//  */
+/**
+ * Cdata.
+ */
 
-// expression('cdata')
-//   .match(/<!\[CDATA\[[\w\W]*?]]>/i, value);
+expression('tag.cdata')
+  .match('<![CDATA[', /[\w\W]*/, ']]>', value);
 
-// /**
-//  * HTML entity.
-//  */
+/**
+ * HTML entity.
+ */
 
-// expression('entity')
-//   .match(/\&#?[\da-z]{1,8};/i, value);
+expression('string.entity')
+  .match('&', /#?/, /[\da-z]{1,8}/, ';', value);
+
+/**
+ * Top of HTML file.
+ */
+
+expression('tag.prolog')
+  .match('<?', /.+?/, '?>', value);
+
+/**
+ * Doctype.
+ */
+
+expression('tag.name.doctype')
+  .match('doctype', value)
+  .match('DOCTYPE', value);
 
 /**
  * Operator.
@@ -225,92 +240,9 @@ expression('comment.content')
 expression('tag.attribute.operator')
   .match('=', value);
 
-// /**
-//  * Whitespace.
-//  */
+/**
+ * Whitespace.
+ */
 
 expression('ws')
   .match(/[\s]*/, value);
-
-function log() {
-  console.log('log', arguments)
-}
-// expression('meta.tag.sgml.doctype.html')
-//   .match(':ws', /[a-z]+/, value);
-
-// expression('meta.tag.block.any.html')
-//   .match(
-//     ':punctuation.definition.tag.html',
-//     ':entity.name.tag.block.any.html',
-//     ':punctuation.definition.tag.end.html',
-//     value
-//   );
-
-// // address|blockquote|dd|div|section|article|aside|header|footer|nav|menu|dl|dt|fieldset|form|frame|frameset|h1|h2|h3|h4|h5|h6|iframe|noframes|object|ol|p|ul|applet|center|dir|hr|pre
-// expression('entity.name.tag.block.any.html')
-//   .match()
-
-// expression('meta.tag.any.html')
-//   .match(':')
-
-// expression('entity.name.tag.html')
-//   .match(/[a-zA-Z0-9:-]+/, value);
-
-// expression('entity.other.attribute-name.html')
-//   .match(/(?<=[^=])\b([a-zA-Z0-9:-]+)/)
-
-// expression('string.quoted.double.html')
-//   .match(
-//     ':punctuation.definition.string.begin.html',
-//     ':entities',
-//     ':punctuation.definition.string.end.html')
-
-// /**
-//  * Top of HTML file.
-//  */
-
-// expression('prolog')
-//   .match(/<\?.+?\?>/);
-
-// /**
-//  * Doctype.
-//  */
-
-// expression('meta.tag.sgml.html')
-//   .match(
-//     ':punctuation.definition.tag.html.open.first',
-//     ':entity.name.tag.doctype.html',
-//     ':meta.tag.sgml.doctype.html',
-//     ':punctuation.definition.tag.html.close',
-//     value
-//   );
-
-// expression('entity.name.tag.doctype.html')
-//   .match('doctype', value)
-//   .match('DOCTYPE', value);
-
-// expression('punctuation.definition.tag.html.open.first')
-//   .match('<!', value);
-// expression(':entities')
-//   .match(':constant.character.entity.html')
-
-// expression('constant.character.entity.html')
-//   .match(':punctuation.definition.entity.html')
-
-// expression('tag-stuff')
-//   .match(':tag-id-attribute', value)
-//   .match(':entity.other.attribute-name.html', value) //.match(':tag-generic-attribute', value)
-  
-//   '#tag-generic-attribute'
-//   'string.quoted.double.html', '#string-double-quoted'
-//   '#string-single-quoted'
-//   '#embedded-code'
-//   '#unquoted-attribute'
-
-// /**
-//  * Doctype tag name.
-//  */
-
-// expression('doctype-name')
-//   .match('doctype', value)
-//   .match('DOCTYPE', value);

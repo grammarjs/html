@@ -62,7 +62,25 @@ describe('html', function(){
       assert.equal(str, compile(str));
     });
   });
+
+  describe('real world', function(){
+    test('<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png" />');
+    test('<meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="languagejs/html" name="twitter:title" /><meta content="html - wip" name="twitter:description" /><meta content="https://avatars0.githubusercontent.com/u/7744824?s=400" name="twitter:image:src" /><meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars0.githubusercontent.com/u/7744824?s=400" property="og:image" /><meta content="languagejs/html" property="og:title" /><meta content="https://github.com/languagejs/html" property="og:url" /><meta content="html - wip" property="og:description" />');
+    test('<input type="text" data-hotkey="s, /" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" autocapitalize="off"'
+      + '\n'
+      + '\ndata-username="lancejpollard"'
+      + '\n  data-repo="languagejs/html"'
+      + '\n  data-branch="master"'
+      + '\n  data-sha="0de3178eae6dd105bcd9a44f2d32ee99ba37e2f4"'
+      + '\n>', true);
+  });
 });
+
+function test(str, log) {
+  return it(str, function(){
+    assert.equal(str, compile(str, log));
+  });
+}
 
 /**
  * Parse `str` to ast, then stringify back.

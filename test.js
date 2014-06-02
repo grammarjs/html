@@ -7,25 +7,54 @@ var parser = new Parser(grammar);
 describe('html', function(){
   it('tag', function(){
     var str = '<p></p>';
-    var val = parser.parse(str);
-    assert.equal(str, stringify(val));
+    assert.equal(str, compile(str));
   });
 
   describe('tag.attribute', function(){
     it('id="content"', function(){
       var str = '<p id="content"></p>';
-      var val = parser.parse(str);
-      assert.equal(str, stringify(val));
+      assert.equal(str, compile(str));
     });
 
     it('contenteditable', function(){
       var str = '<p contenteditable></p>';
-      var val = parser.parse(str);
-      console.log(val);
-      assert.equal(str, stringify(val));
+      assert.equal(str, compile(str));
+    });
+
+    it('data-id="id"', function(){
+      var str = '<p data-id="id"></p>';
+      assert.equal(str, compile(str));
+    });
+
+    it('data-id="id" class="content"', function(){
+      var str = '<p data-id="id" class="content"></p>';
+      assert.equal(str, compile(str));
+    });
+
+    it('class="content paragraph"', function(){
+      var str = '<p class="content paragraph"></p>';
+      assert.equal(str, compile(str));
+    });
+
+    it('contenteditable=true', function(){
+      var str = '<p contenteditable=true></p>';
+      assert.equal(str, compile(str, true));
     });
   });
 });
+
+/**
+ * Parse `str` to ast, then stringify back.
+ *
+ * @param {String} str
+ * @return {String}
+ */
+
+function compile(str, log) {
+  var ast = parser.parse(str);
+  if (log) console.log(JSON.stringify(ast, null, 2));
+  return stringify(ast);
+}
 
 /**
  * For testing, it should generate the original string.

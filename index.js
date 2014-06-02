@@ -101,6 +101,9 @@ expression('tag.attribute')
     ':ws',
     ':tag.attribute.value',
     ':ws',
+    passthrough)
+  .match(
+    ':tag.attribute.name',
     passthrough);
 
 /**

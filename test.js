@@ -59,7 +59,7 @@ describe('html', function(){
 
     it('text', function(){
       var str = '<p>hello world</p>';
-      assert.equal(str, compile(str, true));
+      assert.equal(str, compile(str));
     });
   });
 
@@ -71,6 +71,13 @@ describe('html', function(){
 
     it('<input type="text"/>', function(){
       var str = '<input type="text"/>';
+      assert.equal(str, compile(str));
+    });
+  });
+
+  describe('comment', function(){
+    it('<!-- hello world -->', function(){
+      var str = '<!-- hello world -->';
       assert.equal(str, compile(str));
     });
   });

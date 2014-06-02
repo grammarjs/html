@@ -31,7 +31,8 @@ expression('tag')
   .match(':tag.block', passthrough)
   .match(':tag.inline', passthrough)
   .match(':tag.doctype', passthrough)
-  .match(':text', passthrough);
+  .match(':text', passthrough)
+  .match(':comment', passthrough);
 
 /**
  * Block Tag.

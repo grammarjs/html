@@ -56,6 +56,11 @@ describe('html', function(){
       var str = '<input/>';
       assert.equal(str, compile(str));
     });
+
+    it('<input type="text"/>', function(){
+      var str = '<input type="text"/>';
+      assert.equal(str, compile(str));
+    });
   });
 });
 

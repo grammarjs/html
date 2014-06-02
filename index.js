@@ -171,7 +171,8 @@ expression('tag.inline')
     ':ws',
     ':tag.attribute*',
     ':ws',
-    ':tag.punctuation.bracket.close.end'
+    ':tag.punctuation.bracket.close.end',
+    passthrough
   );
 
 /**

@@ -30,9 +30,10 @@ expression('markup')
 expression('tag')
   .match(':tag.block', passthrough)
   .match(':tag.inline', passthrough)
-  .match(':tag.doctype', passthrough)
   .match(':text', passthrough)
-  .match(':comment', passthrough);
+  .match(':comment', passthrough)
+  .match(':tag.doctype', passthrough)
+  .match(':tag.prolog', passthrough);
 
 /**
  * Block Tag.
@@ -175,8 +176,7 @@ expression('tag.inline')
     ':tag.attribute*',
     ':ws',
     ':tag.punctuation.bracket.close.end',
-    passthrough
-  );
+    passthrough);
 
 /**
  * Text element.
@@ -230,11 +230,23 @@ expression('tag.cdata')
     ':tag.cdata.end',
     value);
 
+/**
+ * CDATA opening tag.
+ */
+
 expression('tag.cdata.begin')
   .match('<![CDATA[', value);
 
+/**
+ * CDATA content.
+ */
+
 expression('tag.cdata.content')
   .match(/[\w\W]*/, value);
+
+/**
+ * CDATA closing tag.
+ */
 
 expression('tag.cdata.end')
   .match(']]>', value);

@@ -9,7 +9,6 @@ var grammar = new Grammar('markup');
 var expression = grammar.expression;
 var value = Token.value;
 var passthrough = Token.passthrough;
-var slice = [].slice;
 
 /**
  * Expose `grammar`.
@@ -30,7 +29,9 @@ expression('markup')
 
 expression('tag')
   .match(':tag.block', passthrough)
-  .match(':tag.inline', passthrough);
+  .match(':tag.inline', passthrough)
+  .match(':tag.doctype', passthrough)
+  .match(':text', passthrough);
 
 /**
  * Block Tag.
@@ -73,7 +74,8 @@ expression('tag.punctuation.bracket.close.begin')
   .match('</', value);
 
 expression('tag.punctuation.bracket.close.end')
-  .match('/>', value);
+  .match('/>', value)
+  .match('>', value);
 
 /**
  * Tag name.
@@ -267,9 +269,24 @@ expression('tag.prolog.end')
  * Doctype.
  */
 
+expression('tag.doctype')
+  .match(
+    ':tag.doctype.punctuation.bracket.begin',
+    ':tag.doctype.name',
+    ':ws',
+    ':tag.doctype.content',
+    ':tag.punctuation.bracket.end',
+    passthrough)
+
 expression('tag.doctype.name')
   .match('doctype', value)
   .match('DOCTYPE', value);
+
+expression('tag.doctype.content')
+  .match(/[a-zA-Z]*/, value);
+
+expression('tag.doctype.punctuation.bracket.begin')
+  .match('<!', value);
 
 /**
  * Operator.

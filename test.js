@@ -5,6 +5,13 @@ var Parser = require('grammarjs-recursive-parser');
 var parser = new Parser(grammar);
 
 describe('html', function(){
+  describe('meta', function(){
+    it('DOCTYPE', function(){
+      var str = '<!DOCTYPE html>';
+      assert.equal(str, compile(str));
+    });
+  });
+
   describe('tag', function(){
     it('tag', function(){
       var str = '<p></p>';
@@ -49,6 +56,11 @@ describe('html', function(){
       var str = '<p><span></span></p>';
       assert.equal(str, compile(str));
     });
+
+    it('text', function(){
+      var str = '<p>hello world</p>';
+      assert.equal(str, compile(str, true));
+    });
   });
 
   describe('tag.inline', function(){
@@ -72,7 +84,7 @@ describe('html', function(){
       + '\n  data-repo="languagejs/html"'
       + '\n  data-branch="master"'
       + '\n  data-sha="0de3178eae6dd105bcd9a44f2d32ee99ba37e2f4"'
-      + '\n>', true);
+      + '\n>');
   });
 });
 

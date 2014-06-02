@@ -63,17 +63,29 @@ expression('tag.block.begin')
     passthrough);
 
 /**
- * Tag punctuation.
+ * Tag opening bracket.
  */
 
 expression('tag.punctuation.bracket.begin')
   .match('<', value);
 
+/**
+ * Tag closing bracket.
+ */
+
 expression('tag.punctuation.bracket.end')
   .match('>', value);
 
+/**
+ * Block-tag closing bracket.
+ */
+
 expression('tag.punctuation.bracket.close.begin')
   .match('</', value);
+
+/**
+ * Inline-tag closing bracket.
+ */
 
 expression('tag.punctuation.bracket.close.end')
   .match('/>', value)
@@ -289,14 +301,26 @@ expression('tag.doctype')
     ':ws',
     ':tag.doctype.content',
     ':tag.punctuation.bracket.end',
-    passthrough)
+    passthrough);
+
+/**
+ * Doctype name.
+ */
 
 expression('tag.doctype.name')
   .match('doctype', value)
   .match('DOCTYPE', value);
 
+/**
+ * Doctype content.
+ */
+
 expression('tag.doctype.content')
   .match(/[a-zA-Z]*/, value);
+
+/**
+ * Doctype bracket.
+ */
 
 expression('tag.doctype.punctuation.bracket.begin')
   .match('<!', value);

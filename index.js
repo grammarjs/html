@@ -281,11 +281,23 @@ expression('tag.prolog')
     ':tag.prolog.end',
     value);
 
+/**
+ * Prolog start tag.
+ */
+
 expression('tag.prolog.begin')
   .match('<?', value);
 
+/**
+ * Prolog content.
+ */
+
 expression('tag.prolog.content')
   .match(/.+/, value);
+
+/**
+ * Prolog end tag.
+ */
 
 expression('tag.prolog.end')
   .match('?>', value);

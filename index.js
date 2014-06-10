@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var Token = require('languagejs-token');
+var Token = require('grammarjs-token');
 var Grammar = require('grammarjs-grammar');
 var grammar = new Grammar('markup');
 var expression = grammar.expression;

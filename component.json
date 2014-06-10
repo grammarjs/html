@@ -1,12 +1,12 @@
 {
   "name": "html",
-  "repo": "languagejs/html",
+  "repo": "grammarjs/html",
   "description": "HTML Grammar",
   "version": "0.0.1",
-  "keywords": ["peg", "html", "syntax highlighting", "grammar"],
+  "keywords": ["peg", "html", "grammar"],
   "dependencies": {
     "grammarjs/grammar": "*",
-    "languagejs/token": "*"
+    "grammarjs/token": "*"
   },
   "development": {
     "grammarjs/recursive-parser": "*",
